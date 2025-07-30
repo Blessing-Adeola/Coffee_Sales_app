@@ -38,7 +38,7 @@ try:
             filtered_df = filtered_df[filtered_df[key].isin(selected_values)]
 
     #display the data
-    st.dataframe (filtered_df)
+    ## st.dataframe (filtered_df)
 
 
     # section 2: calculations
@@ -100,7 +100,6 @@ try:
 
     # assignment
     temp_2.columns = ["Coffee Name","Money"]
-    st.dataframe(temp_2)
     chart_2 = alt.Chart(temp_2).mark_bar().encode(
         x=alt.X("Money:Q"),
         y=alt.Y("Coffee Name:N"),
