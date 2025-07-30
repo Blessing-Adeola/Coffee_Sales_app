@@ -91,7 +91,7 @@ try:
     st.write("### Renenue by Coffee Types")
     temp_2 = filtered_df.groupby('coffee_name')['money'].sum().\
         reset_index().sort_values(by = "money",ascending=False)
-    #temp_2.columns =[]
+    temp_2.columns =["coffee_name","money"]
 
     st.dataframe(temp_2)
 
@@ -99,36 +99,91 @@ try:
 
 
     # assignment
-    temp_2.columns = ["Coffee Name","Money"]
-    chart_2 = alt.Chart(temp_2).mark_bar().encode(
-        x=alt.X("Money:Q"),
-        y=alt.Y("Coffee Name:N"),
-        color=alt.Color("Coffee Name:N", legend=None)
-        ).properties(
-            title=f"Coffee Sales by Revenue",
-            height = 250)
-    st.altair_chart(chart_2, use_container_width=True)
+    # temp_2.columns = ["Coffee Name","Money"]
+    # chart_2 = alt.Chart(temp_2).mark_bar().encode(
+    #     x=alt.X("Money:Q"),
+    #     y=alt.Y("Coffee Name:N"),
+    #     color=alt.Color("Coffee Name:N", legend=None)
+    #     ).properties(
+    #         title=f"Coffee Sales by Revenue",
+    #         height = 250)
+
+    # st.altair_chart(chart_2,use_container_width=True)
 
 
     ## question 2
     # Average Revenue by Coffee sold
-    st.write("### Avg Revenue of coffee sold")
+    # st.write("### Avg Revenue of coffee sold")
 
-    temp_3 = filtered_df.groupby("coffee_name")["money"].mean().reset_index()
+    # temp_3 = filtered_df.groupby("coffee_name")["money"].mean().reset_index()
+    # st.dataframe(temp_3)
+
+    # # chart_3
+    # temp_3.columns = ["Coffee Name","Money"]
+
+    # chart_3 = alt.Chart(temp_3).mark_line(point=True).encode(
+    #     x=alt.X("Money:Q"),
+    #     y=alt.Y("Coffee Name:N"),
+    #     color=alt.Color("Coffee Name:N", legend=None)
+    #     ).properties(
+    #         title=f"Average Revenue of Coffee sold",
+    #         height = 250)
+    # st.altair_chart(chart_3, use_container_width=True)
+
+    
+
+
+
+    ## correction
+    chart_2 = alt.Chart(temp_2).mark_bar().encode(
+        x=alt.X("coffee_name:N"),
+        y=alt.Y("money:Q"),
+        color=alt.Color("coffee_name:N", legend=None)
+        ).properties(height = 500)
+
+    st.altair_chart(chart_2, use_container_width= True)
+
+    #months
+    #st.write(df.columns)
+
+    st.write("### Monthly Sales Trend")
+ 
+    temp_3 = df.groupby("Month_name")["money"].sum().\
+    reset_index().sort_values(by="money", ascending=False)
+
     st.dataframe(temp_3)
 
-    # chart_3
-    temp_3.columns = ["Coffee Name","Money"]
+     # monthly plot
+ 
+    chart_3 = alt.Chart(temp_3).mark_bar().encode(
+        x=alt.X("Month_name:N"),
+        y=alt.Y("money:Q"),
+        color=alt.Color("money:Q", legend=None)
+        ).properties(height = 250)
 
-    chart_3 = alt.Chart(temp_3).mark_line(point=True).encode(
-        x=alt.X("Money:Q"),
-        y=alt.Y("Coffee Name:N"),
-        color=alt.Color("Coffee Name:N", legend=None)
-        ).properties(
-            title=f"Average Revenue of Coffee sold",
-            height = 250)
-    st.altair_chart(chart_3, use_container_width=True)
+    st.altair_chart(chart_3)
 
+    
+# date plot
+    chart_4 = alt.Chart(df).mark_line().encode(
+        x=alt.X("date:T"),
+        y=alt.Y("money:Q"),
+        color=alt.Color("coffee_name:N")
+        ).properties( height = 250)
+    st.altair_chart(chart_4)
+
+    st.subheader("### Average revenue per coffee sold")
+
+    temp_5 = filtered_df.groupby("coffee_name")["money"].mean().reset_index()
+
+    st.dataframe(temp_5)
+
+    chart_5 = alt.Chart(temp_5).mark_line(point=True).encode(
+        x=alt.X("coffee_name"),
+        y=alt.Y("money"),
+    ).properties(height = 250)
+    st.altair_chart(chart_5)
+    
 
 except Exception as e:
     st.error("Error: check error details")
@@ -136,4 +191,3 @@ except Exception as e:
     with st.expander("Error Details"):
         st.code(str(e))
          #st.code(traceback.format_exc())
-    
